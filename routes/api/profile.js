@@ -63,7 +63,7 @@ router.get('/handle/:handle', (req, res) => {
       return res.status(404).json(errors)
     }
     res.json(profile)
-  }).catch(err => { res.json(err) })
+  }).catch(err => res.status(404).json(err))
 })
 
 // @route   GET api/profile/user/:user_id
@@ -206,7 +206,7 @@ router.post('/education', passport.authenticate('jwt', { session: false }), (req
 //@access   Private
 router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: false }), (req, res) => {
   Profile.findOne({ user: req.user.id }).then(profile => {
-    const removeIndex = profile.experience.map(item => item.id).indexOf(req.param.exp_id);
+    const removeIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id);
 
     profile.experience.splice(removeIndex, 1);
 
@@ -219,7 +219,7 @@ router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: fal
 //@access   Private
 router.delete('/education/:edu_id', passport.authenticate('jwt', { session: false }), (req, res) => {
   Profile.findOne({ user: req.user.id }).then(profile => {
-    const removeIndex = profile.education.map(item => item.id).indexOf(req.param.edu_id);
+    const removeIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id);
 
     profile.education.splice(removeIndex, 1);
 
