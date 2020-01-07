@@ -5,6 +5,7 @@ const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const path = require("path");
 
 const app = express();
 
@@ -32,5 +33,12 @@ const port = process.env.port || 5000;
 app.use("/api/users", users);
 app.use("/api/profile", profile);
 app.use("/api/posts", posts);
+
+if (process.env.MONGO_URI === 'production') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  })
+}
 
 app.listen(port, () => console.log(`Server is working on port ${port}`));
